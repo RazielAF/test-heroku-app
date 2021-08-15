@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./dist/style.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Hi</h1>
+    <form onsubmit='handleSubmit(event)'>
+        <input type="text" name="name" placeholder="name">
+        <input type='text' name='id' placeholder="ID">
+        <input type="submit" value="SEND">
+    </form>
+    <div id="root"></div>
+    <script>
+        //GET
+        axios.get('/getStudents')
+        .then(res=>{
+            console.log(res.data)
+            renderData(res.data.students)
+        })
+
+        //POST
+        function handleSubmit(ev){
+            ev.preventDefault();
+            let {name, id} = ev.target.elements;
+            name = name.value;
+            id= id.value;
+            ev.target.reset();
+            axios.post('/addStudent',{name, id})
+            .then(res=>renderData(res.data.students))
+        }
+        
+        function renderData(data){
+            const html = data.map(person=>{
+                return `<div class='person'>
+                    <input id='${person.id}name' class='person__name' value='${person.name}'>
+                 <div class='button button--update' onclick='updateRecord("${person.id}")'>UPDATE</div>
+                <div class='button button--delete' onclick='deleteRecord("${person.id}")'>DELETE</div>
+                </div>`
+            }).join('');
+
+            document.getElementById('root').innerHTML = html
+        }
+
+        //DELETE
+        function deleteRecord(personId){
+            axios.post('/deleteStudent',{id:personId})
+            .then(res=>{
+                renderData(res.data.students)
+            })
+        }
+
+        //UPDATE
+        function updateRecord(personId){
+            const newName = document.getElementById(`${personId}name`).value;
+            console.dir(newName)
+            axios.put('/updateStudent',{id:personId, name:newName})
+            .then(res=>{
+                console.log(res.data.message)
+                renderData(res.data.students)
+            })
+        }
+    </script>
+</body>›

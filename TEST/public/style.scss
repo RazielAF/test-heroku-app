@@ -1,0 +1,36 @@
+h1 {
+  color: red;
+}
+#root{
+  margin: 20px auto;
+  width: fit-content;
+}
+.person{
+  padding: 20px;
+  
+  border-radius: 5px;
+  background-color: wheat;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.52);
+  margin: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.button{
+  text-transform: uppercase;
+  background-color: blue;
+  margin: 0px 5px;
+  color: white;
+  padding:10px;
+  font-size: small;
+  border-radius: 5px;
+  user-select: none;
+  cursor: pointer;
+
+  &--delete{
+    background-color:red;
+  }
+  &--update{
+    background-color:orange;
+  }
+}
